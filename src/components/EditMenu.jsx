@@ -27,8 +27,16 @@ class EditMenu extends Component {
                 background-color: red;
             }
             `}</style>
-          <button className="edit">Edit Post</button>
-          <button className="delete">Delete Post</button>
+          <Edit onClickingEditButton={this.handleClickingEditButton} />
+          <button className="edit" onClick={this.handleClickingEditButton()}>
+            Edit Post
+          </button>
+          <button
+            className="delete"
+            onClick={this.handleClickingDeleteButton()}
+          >
+            Delete Post
+          </button>
         </div>
       );
     }
