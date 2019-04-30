@@ -6,6 +6,28 @@ import Feed from "./Feed";
 import FriendList from "./FriendList";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Feed: {
+        masterPostList: [],
+        creatingNewPost: false,
+        stateObjectWorks: false
+      }
+    };
+    this.updateAppFromFeed = this.updateAppFromFeed.bind(this);
+  }
+
+  updateAppFromFeed(newStateObject) {
+    console.log(newStateObject);
+    this.setState({
+      Feed: newStateObject
+    });
+    setTimeout(() => {
+      console.log(this.state);
+    }, 0);
+  }
+
   render() {
     let columns = {
       display: "grid",
@@ -22,7 +44,10 @@ class App extends Component {
             <Bio />
           </div>
           <div>
-            <Feed />
+            <Feed
+              status={this.state.Feed}
+              updateAppState={this.updateAppFromFeed}
+            />
           </div>
           <div>
             <FriendList />

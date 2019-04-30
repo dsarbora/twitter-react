@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import Like from "./Like";
 import PropTypes from "prop-types";
+import EditMenu from "./EditMenu";
 
 class Post extends Component {
   constructor(props) {
     super(props);
-    this.state = this.props;
+    this.state = this.props.status;
     this.handleClickingLike = this.handleClickingLike.bind(this);
   }
 
@@ -13,9 +14,9 @@ class Post extends Component {
     this.setState({
       likes: this.state.likes + 1
     });
-    // setTimeout(() => {
-    //   console.log(this.state.likes);
-    // }, 0);
+    setTimeout(() => {
+      this.props.updateFeedState(this.state);
+    }, 0);
   }
 
   render() {
@@ -38,18 +39,33 @@ class Post extends Component {
     let name = {
       marginLeft: "10px"
     };
-
+    console.log("this");
+    console.log(this.state);
     return (
       <div style={border}>
-        <img style={image} src={this.props.img} />
+        <style>{`
+      .left {
+        float: left;
+      }
+      .right {
+        float: right;
+        margin-right: 100px;
+      }
+      `}</style>
+        <img style={image} src={this.state.img} />
         <div>
           <p style={name}>
-            <strong>{this.props.name}</strong>
+            <strong>{this.state.name}</strong>
           </p>
-          <p style={text}>{this.props.text}</p>
+          <p style={text}>{this.state.text}</p>
           <p>Likes: {this.state.likes}</p>
           <div>
-            <Like onClickLike={this.handleClickingLike} />
+            <div className="left">
+              <Like onClickLike={this.handleClickingLike} />
+            </div>
+            <div className="right">
+              <EditMenu status={this.state.EditMenu} />
+            </div>
           </div>
         </div>
       </div>

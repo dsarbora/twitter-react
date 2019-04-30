@@ -7,10 +7,7 @@ import v4 from "uuid";
 class Feed extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      masterPostList: [],
-      creatingNewPost: false
-    };
+    this.state = this.props.status;
     this.handleAddingNewPost = this.handleAddingNewPost.bind(this);
   }
 
@@ -20,6 +17,24 @@ class Feed extends Component {
     });
   }
 
+  updateFeedStateFromPost(postToBeChanged) {
+    let postListToUpdate = this.state.masterPostList.slice();
+    let postIndex = this.findPostIndex(postToBeChanged, postListToBeUpdated);
+    postListToUpdate.splice(postIndex, 1, postToBeChanged);
+
+    this.setState({
+      masterPostList: postListToUpdate
+    }).then(this.props.updateAppState(this.state));
+  }
+
+  findPostIndex(post, arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (post.id === arr[i].id) {
+        return i;
+      }
+    }
+  }
+
   handleAddingNewPost(postText) {
     let postList = this.state.masterPostList.slice();
     let post = {
@@ -27,7 +42,10 @@ class Feed extends Component {
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
       name: "Name N Namovich",
       text: postText,
-      id: v4()
+      id: v4(),
+      EditMenu: {
+        editMenuShowing: false
+      }
     };
     postList.unshift(post);
 
@@ -35,7 +53,10 @@ class Feed extends Component {
       masterPostList: postList,
       creatingNewPost: false
     });
-    console.log(this.state.masterPostList);
+    setTimeout(() => {
+      console.log("new state");
+      console.log(this.state.masterPostList);
+    }, 0);
   }
 
   render() {
@@ -57,12 +78,9 @@ class Feed extends Component {
           <button onClick={() => this.onClickAddPost()}>Create Post</button>
           {this.state.masterPostList.map(post => (
             <Post
-              name={post.name}
-              img={post.img}
-              text={post.text}
+              status={post}
+              updateFeedState={this.updateFeedStateFromPost}
               key={post.id}
-              id={post.id}
-              likes={0}
             />
           ))}
         </div>
